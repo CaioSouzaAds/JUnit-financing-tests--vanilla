@@ -110,5 +110,40 @@ public class FinancingTests {
 			fnc.setIncome(updatedIncome);
 		});
 	}
+	
+	
+	@Test
+    public void setMonthsShouldUpdateMonthsWhenValidData() {
+        // Arrange
+        double totalAmountExpected = 50000.0;
+        double incomeExpected = 2000.0;
+        Integer monthsExpected = 80;
+
+        Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+
+        // Action
+        Integer updatedMonths = 120;
+        fnc.setMonths(updatedMonths);
+
+        // Assert
+        Assertions.assertEquals(updatedMonths, fnc.getMonths());
+    }
+
+    @Test
+    public void setMonthsShouldThrowExceptionWhenIsInvalidData() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            // Arrange
+            double totalAmountExpected = 100000.0;
+            double incomeExpected = 2000.0;
+            Integer monthsExpected = 80;
+
+            Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+
+            // Action
+            Integer updatedMonths = 20; // Example of invalid data
+            fnc.setMonths(updatedMonths);
+        });
+    }
+	
 
 }
