@@ -110,40 +110,78 @@ public class FinancingTests {
 			fnc.setIncome(updatedIncome);
 		});
 	}
-	
-	
+
 	@Test
-    public void setMonthsShouldUpdateMonthsWhenValidData() {
-        // Arrange
-        double totalAmountExpected = 50000.0;
-        double incomeExpected = 2000.0;
-        Integer monthsExpected = 80;
+	public void setMonthsShouldUpdateMonthsWhenValidData() {
+		// Arrange
+		double totalAmountExpected = 50000.0;
+		double incomeExpected = 2000.0;
+		Integer monthsExpected = 80;
 
-        Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+		Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
 
-        // Action
-        Integer updatedMonths = 120;
-        fnc.setMonths(updatedMonths);
+		// Action
+		Integer updatedMonths = 120;
+		fnc.setMonths(updatedMonths);
 
-        // Assert
-        Assertions.assertEquals(updatedMonths, fnc.getMonths());
-    }
+		// Assert
+		Assertions.assertEquals(updatedMonths, fnc.getMonths());
+	}
 
-    @Test
-    public void setMonthsShouldThrowExceptionWhenIsInvalidData() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            // Arrange
-            double totalAmountExpected = 100000.0;
-            double incomeExpected = 2000.0;
-            Integer monthsExpected = 80;
+	@Test
+	public void setMonthsShouldThrowExceptionWhenIsInvalidData() {
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			// Arrange
+			double totalAmountExpected = 100000.0;
+			double incomeExpected = 2000.0;
+			Integer monthsExpected = 80;
 
-            Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+			Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
 
-            // Action
-            Integer updatedMonths = 20; // Example of invalid data
-            fnc.setMonths(updatedMonths);
-        });
-    }
-	
+			// Action
+			Integer updatedMonths = 20; // Example of invalid data
+			fnc.setMonths(updatedMonths);
+		});
+	}
+
+	@Test
+	public void entryShouldCalculateCorrectly() {
+		// Arrange
+		double totalAmount = 100000.0;
+		double incomeExpected = 2000.0;
+		Integer monthsExpected = 80;
+		double expectedEntry = totalAmount * 0.2;
+
+		Financing fnc = FinancingFactory.createFinancing(totalAmount, incomeExpected, monthsExpected);
+
+		// Act
+		double calculatedEntry = fnc.entry();
+
+		// Assert
+		Assertions.assertEquals(expectedEntry, calculatedEntry);
+	}
+
+	@Test
+	public void quotaShouldCalculateCorrectly() {
+		// Arrange
+		double totalAmountExpected = 100000.0;
+		double incomeExpected = 2000.0;
+		Integer monthsExpected = 80;
+
+		Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+
+		// Calculate expected quota using the entry method, getMonths, and
+		// getTotalAmount
+		double expectedEntry = fnc.entry();
+		Integer expectedMonths = fnc.getMonths();
+		double expectedTotalAmount = fnc.getTotalAmount();
+		double expectedQuota = (expectedTotalAmount - expectedEntry) / expectedMonths;
+
+		// Act
+		double calculatedQuota = fnc.quota();
+
+		// Assert
+		Assertions.assertEquals(expectedQuota, calculatedQuota);
+	}
 
 }
