@@ -78,4 +78,37 @@ public class FinancingTests {
 
 	}
 
+	@Test
+	public void setIncomeShouldUpdateIncomeWhenValidData() {
+		// Arrange
+		double totalAmountExpected = 50000.0;
+		double incomeExpected = 2000.0;
+		Integer monthsExpected = 80;
+
+		Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+
+		// Action
+		double updatedIncome = 3000.0;
+		fnc.setIncome(updatedIncome);
+
+		// Assert
+		Assertions.assertEquals(updatedIncome, fnc.getIncome());
+	}
+
+	@Test
+	public void setIncomeShouldUpdateIncomeWhenIsInvalidData() {
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			// Arrange
+			double totalAmountExpected = 50000.0;
+			double incomeExpected = 2000.0;
+			Integer monthsExpected = 80;
+
+			Financing fnc = FinancingFactory.createFinancing(totalAmountExpected, incomeExpected, monthsExpected);
+
+			// Action
+			double updatedIncome = -1000.0; // Example of invalid data
+			fnc.setIncome(updatedIncome);
+		});
+	}
+
 }
